@@ -7,6 +7,8 @@ load_dotenv()
 
 userid = os.environ['USER_ID']
 
+results = []
+
 def submitFiles(program_list, language):
 	"""
 	Get Moss Results Report URL
@@ -23,6 +25,8 @@ def downloadReport(url):
 	"""
 	mosspy.download_report(url, "submission/report/", connections=8)
 
+def getLineNumbers():
+	pass
 
 def extractInfo(url, files):
 	"""
@@ -31,17 +35,32 @@ def extractInfo(url, files):
 	res = requests.get(url, headers={'User-Agent': 'Mozilla/5.0'})
 	html = bs(res.text, "lxml")
 
-	for row in html.find_all('tr'):
-		cols = row.find_all('td')
-		cols = [x.text.strip() for x in cols]
+	date_time = html.find_all('p')[0]
 
+	# get the results table
+	table = html.find_all('table')[0]
+	#print(table)
+	for row in table.find_all('tr'):
+		#column_marker = 0
+		columns = row.find_all('td')
+		cols = [filename.text.strip() for filename in columns]
+		for link in columns:
+			if link.a != None:
+				result_link = link.a["href"]
+				cols.append(result_link)
+
+	print(cols)
+	
+	#its buggy need to fix
 	for item, file in zip(cols, files):
 		percentage = item[len(file)+1:]
 
 	print("Report URL : " + url)
 	print(percentage + " code matched in " + str(files))
 	print("Lines Matched : " + str(cols[-1]))
+	print("Date : " + date_time.text.strip())
 
 files = ['testfiles/test_python.py', 'testfiles/test_python2.py']
+
 url = submitFiles(files, "Python")
 extractInfo(url, files)

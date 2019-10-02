@@ -9,7 +9,8 @@ Fetch the URL and gather following results:
 - [x] Number of Lines Matched
 - [x] URL itself
 - [ ] Lines Matched
-- [ ] Date/Time of submission
+- [x] Date/Time of submission
+- [ ] Convert Time to IST.
 - [ ] Return a list of dictionary containing:
     ```json
     [
