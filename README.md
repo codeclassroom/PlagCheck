@@ -25,3 +25,16 @@ Fetch the URL and gather following results:
     ....
     ]
     ```
+
+### Process
+
+1. We send files to MOSS.
+2. MOSS returns a URL like `http://moss.stanford.edu/results/500496824`.
+3. We Parse the page and obtain following details.
+ - Files which have similarity.
+ - Percentage Matches.
+ - No.of Lines Matched.
+4. For every 2 file matches, we parse the link given in table `http://moss.stanford.edu/results/500496824/match0.html`.
+From this we parse:
+ - Line Number which have matches
+5. That's it.
