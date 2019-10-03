@@ -26,8 +26,12 @@ def downloadReport(url):
 	"""
 	mosspy.download_report(url, "submission/report/", connections=8)
 
-def getLineNumbers():
-	pass
+def getLineNumbers(diff_link):
+	top_frame_link = "match0-top.html"
+	res = requests.get(diff_link + top_frame_link, headers={'User-Agent': 'Mozilla/5.0'})
+	html = bs(res.text, "lxml")
+	table = html.find_all('table')
+	print(table)
 
 
 def getFormattedDate(date_time):
@@ -47,6 +51,7 @@ def extractInfo(url, files):
 	"""
 	cols = []
 	filenames = []
+	diff_link = []
 
 	res = requests.get(url, headers={'User-Agent': 'Mozilla/5.0'})
 	html = bs(res.text, "lxml")
@@ -63,11 +68,14 @@ def extractInfo(url, files):
 			if column_marker <=1:
 				cols.append(filename.text.strip())
 			column_marker += 1
-	# get line 
-	# for link in columns:
-	# 	if link.a != None:
-	# 		result_link = link.a["href"]
-	# 		cols.append(result_link)
+
+		for link in columns:
+			if link.a != None:
+				result_link = link.a["href"]
+				diff_link.append(result_link)
+
+	if diff_link[0] == diff_link[1]:
+		getLineNumbers(diff_link[0])
 
 	for item, file in zip(cols, files):
 		percentage = item[len(file)+2:len(item)-2]
@@ -85,11 +93,13 @@ def extractInfo(url, files):
 
 	results.append(result_dict)
 	print(results)
-	
+
 	#redundant data
 	print("Lines Matched : " + str(cols[-1]))
 	
 files = ['testfiles/test_python.py', 'testfiles/test_python2.py']
 
-url = submitFiles(files, "Python")
-extractInfo(url, files)
+#url = submitFiles(files, "Python")
+#extractInfo(url, files)
+diff = "http://moss.stanford.edu/results/835218475/match0.html"
+getLineNumbers(diff[:len(diff)-11])
