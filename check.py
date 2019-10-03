@@ -29,14 +29,17 @@ def downloadReport(url):
 def getLineNumbers():
 	pass
 
-def getFormattedDate(date_time):
-	#Fix this
-	#Thu Oct 3 00:16:17 PDT 2019
-	date_time_obj = datetime.datetime.strptime(
-		date_time, "%a %B %d %H:%M:%S")
 
-	print('Date:', date_time_obj.date())
-	print('Time:', date_time_obj.time())
+def getFormattedDate(date_time):
+	#Thu Oct 3 00:16:17 PDT 2019
+	#timezone is sill PDT, need to change
+	date = date_time[0:18] + " " + date_time[23:27]
+	date_time_obj = datetime.datetime.strptime(
+		str(date), '%c')
+	date = str(date_time_obj.date())
+	time = str(date_time_obj.time())
+	return date, time
+
 
 def extractInfo(url, files):
 	"""
@@ -67,36 +70,26 @@ def extractInfo(url, files):
 	# 		cols.append(result_link)
 
 	for item, file in zip(cols, files):
-		percentage = item[len(file)+1:]
+		percentage = item[len(file)+2:len(item)-2]
 		filenames.append(item[0:len(file)])
 
+	date, time = getFormattedDate(date_time)
 	result_dict = dict(
 		file1 = filenames[0], 
 		file2 = filenames[1], 
-		percentage = percentage,
-		url = url
+		percentage = int(percentage),
+		url = url,
+		date = date,
+		time = time
 	)
 
 	results.append(result_dict)
 	print(results)
+	
+	#redundant data
 	print("Lines Matched : " + str(cols[-1]))
-	getFormattedDate(date_time)
-	#print("Date : " + getFormattedDate(date_time))
-
+	
 files = ['testfiles/test_python.py', 'testfiles/test_python2.py']
 
 url = submitFiles(files, "Python")
 extractInfo(url, files)
-
-# Thu Oct 3 00:16:17 PDT 2019
-"""
-me understanding datetime -_-
-date = date_time[4:7]
-date = date + " " + date_time[8]
-date = date + " " + date_time[23:27]
-Output : 'Oct 3 2019'
-
-"Mon, 21 March, 2015" -> "%a, %d %B, %Y"
-
-"%a %B %d %H:%M:%S "
-"""
