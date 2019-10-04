@@ -27,16 +27,34 @@ def downloadReport(url):
 	mosspy.download_report(url, "submission/report/", connections=8)
 
 def getLineNumbers(diff_link):
-	top_frame_link = "match0-top.html"
-	res = requests.get(diff_link + top_frame_link, headers={'User-Agent': 'Mozilla/5.0'})
+	"""
+	Get Line Numbers which are same
+	"""
+	line_no_set = set()
+	page_name = diff_link.split('/')[5].split('.')[0]
+	top_frame_name = "-top.html"
+	result_link = "http://moss.stanford.edu/results/"
+	result_id = diff_link.split('/')[4] + "/"
+	result_page = result_link + result_id + page_name + top_frame_name
+	res = requests.get(result_page, headers={'User-Agent': 'Mozilla/5.0'})
 	html = bs(res.text, "lxml")
-	table = html.find_all('table')
-	print(table)
+	table = html.find_all('table')[0]
+	#print(table)
+
+	for row in table.find_all('tr'):
+		columns = row.find_all('td')
+		for filename in columns:
+			if filename.text.strip() != '':
+				line_no_set.add(filename.text.strip())
+	
+	return list(line_no_set)
 
 
 def getFormattedDate(date_time):
-	#Thu Oct 3 00:16:17 PDT 2019
-	#timezone is sill PDT, need to change
+	"""
+	Ex : Thu Oct 3 00:16:17 PDT 2019
+	timezone is sill PDT, need to change
+	"""
 	date = date_time[0:18] + " " + date_time[23:27]
 	date_time_obj = datetime.datetime.strptime(
 		str(date), '%c')
@@ -75,7 +93,7 @@ def extractInfo(url, files):
 				diff_link.append(result_link)
 
 	if diff_link[0] == diff_link[1]:
-		getLineNumbers(diff_link[0])
+		line_numbers = getLineNumbers(diff_link[0])
 
 	for item, file in zip(cols, files):
 		percentage = item[len(file)+2:len(item)-2]
@@ -88,7 +106,8 @@ def extractInfo(url, files):
 		percentage = int(percentage),
 		url = url,
 		date = date,
-		time = time
+		time = time,
+		lines_matched = line_numbers
 	)
 
 	results.append(result_dict)
@@ -99,7 +118,7 @@ def extractInfo(url, files):
 	
 files = ['testfiles/test_python.py', 'testfiles/test_python2.py']
 
-#url = submitFiles(files, "Python")
-#extractInfo(url, files)
-diff = "http://moss.stanford.edu/results/835218475/match0.html"
-getLineNumbers(diff[:len(diff)-11])
+url = submitFiles(files, "Python")
+extractInfo(url, files)
+# diff = "http://moss.stanford.edu/results/835218475/match0.html"
+# getLineNumbers(diff)
