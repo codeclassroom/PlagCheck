@@ -1,5 +1,5 @@
-## cc-cheat Docs
-> Derived from [Reading the Results](http://moss.stanford.edu/general/format.html)
+## cc-cheat Usage Guide
+> Derived from [Reading the Results](http://moss.stanford.edu/general/format.html).
 
 *cc-cheat* returns the following list of dictionaries:
 ```json
@@ -18,25 +18,27 @@
 ```
 Each dict item contains the following items:
 
-1. **file1** & **file2**.
-These pairs of file names that have similar code.
+- **file1** & **file2** : 
+The pair of file names that have similar code.
 
-2. **percentage**.
+- **percentage** : 
 It is the the percentage of the code in one file considered to match code in the other file.
 
-3. **lines_matched**.
-Lines Matched is approximately the number of lines of code that matched.
-For example :
-If lines_matched == ['88-99','119-131']
-Then the line numbers 88-99 in *file1* match with lines 119-131 in *file2*.
+- **lines_matched** : 
+  Lines Matched is approximately the number of lines of code that matched.
+
+  For example :
+  If ***lines_matched* == ['88-99','119-131']**
+  
+  Then the line numbers 88-99 in *file1* match with lines 119-131 in *file2*.
 
 > For both measures(*lines_matched* & *percentage*), higher numbers mean more code matches.
 
-4. **date** & **time**
+4. **date** & **time** : 
 Date and Time of the submission of files to MOSS server. The Timezone is currently PDT.
 
-5. **url**
-The homepage of the results for each submission to MOSS.
+5. **url** : 
+The homepage link of the results for each submission to MOSS.
 
 
 ## [Tips](http://moss.stanford.edu/general/tips.html)
@@ -55,4 +57,4 @@ Moss was written and is maintained by Alex Aiken, aiken@cs.stanford.edu.
 The HTML interface was conceived of and designed by Guido Malpohl (s_malpoh@ira.uka.de), the author of JPlag, a plagiarism detection system for Java programs.
 
 cc-cheat extract info. from the webpages for easier storing of results.
-Contact [varshneybhupes@gmail.com]() for more info.
+Contact [varshneybhupesh@gmail.com]() for more info.
