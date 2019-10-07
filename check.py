@@ -92,7 +92,10 @@ def extractInfo(url, files):
 				result_link = link.a["href"]
 				diff_link.append(result_link)
 
-	if diff_link[0] == diff_link[1]:
+	if len(diff_link) == 0:
+		# Means the table is empty
+		print("No Matches")
+	elif diff_link[0] == diff_link[1]:
 		line_numbers = getLineNumbers(diff_link[0])
 
 	for item, file in zip(cols, files):
@@ -116,9 +119,10 @@ def extractInfo(url, files):
 	#redundant data
 	print("Lines Matched : " + str(cols[-1]))
 	
-files = ['testfiles/test_python.py', 'testfiles/test_python2.py']
+files = ['testfiles/test_java.java', 'testfiles/test_java2.java']
 
-url = submitFiles(files, "Python")
+url = submitFiles(files, "Java")
+print(url)
 extractInfo(url, files)
 # diff = "http://moss.stanford.edu/results/835218475/match0.html"
 # getLineNumbers(diff)
