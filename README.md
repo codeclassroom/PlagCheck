@@ -1,5 +1,5 @@
-# cc-cheat
-The MOSS interface scripts for CodeClassroom
+# PlagCheck ✅
+The MOSS interface module for CodeClassroom
 
 ## TODO:
 

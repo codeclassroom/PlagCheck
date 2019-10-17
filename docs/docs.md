@@ -1,7 +1,7 @@
-## cc-cheat Usage Guide
+## PlagCheck Usage Guide
 > Derived from [Reading the Results](http://moss.stanford.edu/general/format.html).
 
-*cc-cheat* returns the following list of dictionaries:
+*PlagCheck* returns the following list of dictionaries:
 ```json
 [
   {
@@ -56,5 +56,5 @@ Moss was written and is maintained by Alex Aiken, aiken@cs.stanford.edu.
 
 The HTML interface was conceived of and designed by Guido Malpohl (s_malpoh@ira.uka.de), the author of JPlag, a plagiarism detection system for Java programs.
 
-cc-cheat extract info. from the webpages for easier storing of results.
+PlagCheck extract info. from the webpages for easier storing of results.
 Contact [varshneybhupesh@gmail.com]() for more info.
