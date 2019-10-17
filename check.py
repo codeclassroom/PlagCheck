@@ -2,6 +2,7 @@ import mosspy
 import os
 import requests
 import datetime
+import re
 from bs4 import BeautifulSoup as bs
 from dotenv import load_dotenv
 load_dotenv()
@@ -55,7 +56,7 @@ def getFormattedDate(date_time):
 	Ex : Thu Oct 3 00:16:17 PDT 2019
 	timezone is sill PDT, need to change
 	"""
-	date = date_time[0:18] + " " + date_time[23:27]
+	date = date_time[0:18] + date_time[23:len(date_time)]
 	date_time_obj = datetime.datetime.strptime(
 		str(date), '%c')
 	date = str(date_time_obj.date())
@@ -68,61 +69,44 @@ def extractInfo(url, files):
 	Scrape the webpage for percentage match etc.
 	"""
 	cols = []
-	filenames = []
-	diff_link = []
-
+	data = []
+	
 	res = requests.get(url, headers={'User-Agent': 'Mozilla/5.0'})
 	html = bs(res.text, "lxml")
 
 	date_time = html.find_all('p')[0]
 	date_time = " ".join(date_time.text.split())
-	# get the results table
+
 	table = html.find_all('table')[0]
 
-	for row in table.find_all('tr'):
-		columns = row.find_all('td')
-		for filename in columns:
-			column_marker = 0
-			if column_marker <=1:
-				cols.append(filename.text.strip())
-			column_marker += 1
+	rows = table.find_all('tr')
 
-		for link in columns:
-			if link.a != None:
-				result_link = link.a["href"]
-				diff_link.append(result_link)
+	for row in rows:
+		cols = row.find_all('td')
+		for element in cols:
+			data.append(element.text.strip())
+		
+		if len(data) != 0:
+			perc = re.findall(r'\d+', data[0]) 
+			perc = int(list(map(int, perc))[0])
+			result_dict = dict(
+				file1 = data[0].split(' ')[0],
+				file2 = data[1].split(' ')[0],
+				percentage = perc,
+				no_of_lines_matched = int(data[2])
+			)
+			results.append(result_dict)
 
-	if len(diff_link) == 0:
-		# Means the table is empty
-		print("No Matches")
-	elif diff_link[0] == diff_link[1]:
-		line_numbers = getLineNumbers(diff_link[0])
+		data.clear()
+		# for link in columns:
+		# 	if link.a != None:
+		# 		result_link = link.a["href"]
+		# 		diff_link.append(result_link)
 
-	for item, file in zip(cols, files):
-		percentage = item[len(file)+2:len(item)-2]
-		filenames.append(item[0:len(file)])
-
-	date, time = getFormattedDate(date_time)
-	result_dict = dict(
-		file1 = filenames[0], 
-		file2 = filenames[1], 
-		percentage = int(percentage),
-		url = url,
-		date = date,
-		time = time,
-		lines_matched = line_numbers
-	)
-
-	results.append(result_dict)
 	print(results)
-
-	#redundant data
-	print("Lines Matched : " + str(cols[-1]))
 	
-files = ['testfiles/test_java.java', 'testfiles/test_java2.java']
+files = ['testfiles/test_java.java', 'testfiles/test_java3.java', 'testfiles/test_python.py', 'testfiles/test_python2.py']
 
 url = submitFiles(files, "Java")
 print(url)
 extractInfo(url, files)
-# diff = "http://moss.stanford.edu/results/835218475/match0.html"
-# getLineNumbers(diff)
