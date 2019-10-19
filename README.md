@@ -1,5 +1,5 @@
 # PlagCheck ✅
-The MOSS interface module for CodeClassroom
+The MOSS interface package for CodeClassroom
 
 ### Installation 🔮
 
@@ -40,7 +40,7 @@ pip install -r requirements.txt
 
 ### Usage
 
-Import the `check` method from *PlagCheck* Package.
+Import the `check` method from *PlagCheck*.
 
 ```python
 import os
