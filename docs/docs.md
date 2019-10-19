@@ -8,7 +8,7 @@
     "file1":"filename1.py",
     "file2":"filename2.py",
     "percentage":"34",
-    "lines_matched":["2-3", "10-11"],
+    "lines_matched":[["2-3", "10-11"]],
     "date":"2019-10-03",
     "time":"05:48:01",
     "url":"https://mossresults/..."
@@ -25,12 +25,15 @@ The pair of file names that have similar code.
 It is the the percentage of the code in one file considered to match code in the other file.
 
 - **lines_matched** : 
-  Lines Matched is approximately the number of lines of code that matched.
+  Lines Matched is approximately the number of lines of code that matched between 2 given files.
 
   For example :
-  If ***lines_matched* == ['88-99','119-131']**
+  If ***lines_matched* is [['88-99','119-131']]**
   
-  Then the line numbers 88-99 in *file1* match with lines 119-131 in *file2*.
+  Then the line numbers 88-99 of *file1* matched with lines 119-131 of *file2*.
+
+  lines_matched is a list of lists indicating all line number matches between 2 code files.
+
 
 > For both measures(*lines_matched* & *percentage*), higher numbers mean more code matches.
 
@@ -56,5 +59,5 @@ Moss was written and is maintained by Alex Aiken, aiken@cs.stanford.edu.
 
 The HTML interface was conceived of and designed by Guido Malpohl (s_malpoh@ira.uka.de), the author of JPlag, a plagiarism detection system for Java programs.
 
-PlagCheck extract info. from the webpages for easier storing of results.
+PlagCheck extracts information from the webpages for easier storing of results.
 Contact [varshneybhupesh@gmail.com]() for more info.

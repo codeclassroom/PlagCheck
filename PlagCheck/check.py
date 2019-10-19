@@ -7,11 +7,9 @@ from bs4 import BeautifulSoup as bs
 from dotenv import load_dotenv
 load_dotenv()
 
-userid = os.environ['USER_ID']
-
 results = []
 
-def submitFiles(program_list, language):
+def submitFiles(program_list, language, userid):
 	"""
 	Get Moss Results Report URL
 	"""
@@ -31,24 +29,29 @@ def getLineNumbers(diff_link):
 	"""
 	Get Line Numbers which are same
 	"""
-	line_no_set = set()
+	line_nos = []
+	list_of_line_nos = []
 	page_name = diff_link.split('/')[5].split('.')[0]
 	top_frame_name = "-top.html"
 	result_link = "http://moss.stanford.edu/results/"
 	result_id = diff_link.split('/')[4] + "/"
 	result_page = result_link + result_id + page_name + top_frame_name
+	
 	res = requests.get(result_page, headers={'User-Agent': 'Mozilla/5.0'})
+	
 	html = bs(res.text, "lxml")
 	table = html.find_all('table')[0]
-	#print(table)
+	rows = table.find_all('tr')
 
-	for row in table.find_all('tr'):
+	for row in rows:
 		columns = row.find_all('td')
 		for filename in columns:
 			if filename.text.strip() != '':
-				line_no_set.add(filename.text.strip())
+				line_nos.append(filename.text.strip())
+		if line_nos not in list_of_line_nos:
+			list_of_line_nos.append(line_nos)
 	
-	return list(line_no_set)
+	return list_of_line_nos
 
 
 def getFormattedDate(date_time):
@@ -103,10 +106,15 @@ def extractInfo(url, files):
 		# 		result_link = link.a["href"]
 		# 		diff_link.append(result_link)
 
-	print(results)
-	
-files = ['testfiles/test_java.java', 'testfiles/test_java3.java', 'testfiles/test_python.py', 'testfiles/test_python2.py']
+	return results
 
-url = submitFiles(files, "Java")
-print(url)
-extractInfo(url, files)
+
+def check(program_files, language, user_id):
+	url = submitFiles(program_files, language, user_id)
+	results = extractInfo(url, program_files)
+
+	return results, url
+
+# diff = "http://moss.stanford.edu/results/223519341/match0.html"
+# diff_result=getLineNumbers(diff)
+# print(diff_result)
