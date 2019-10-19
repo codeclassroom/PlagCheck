@@ -43,12 +43,16 @@ pip install -r requirements.txt
 Import the `check` method from *PlagCheck* module.
 
 ```python
+import os
 from PlagCheck.check import check
 
-program_files = "test_python.py"
+userid = os.environ['USER_ID']
+
+program_files = ['testfiles/test_python.py', 'testfiles/test_python3.py']
 language = "Python"
 
-results = check(program_files, language)
+results, url = check(program_files, language, userid)
+print(url)
 print(results)
 ```
 
