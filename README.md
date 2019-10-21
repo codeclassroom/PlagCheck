@@ -76,7 +76,7 @@ Fetch the URL and gather following results:
 - [x] Percentage of Code Matches
 - [x] Number of Lines Matched
 - [x] URL itself
-- [ ] Lines Matched
+- [x] Lines Matched*
 - [x] Return a list of dictionaries containing:
     ```json
     [

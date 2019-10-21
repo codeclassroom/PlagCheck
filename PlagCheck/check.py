@@ -11,16 +11,16 @@ class check:
 	results = []
 
 	def __init__(self, program_files, lang, user_id):
-		self.user_id = user_id
+		self.__user_id = user_id
 		self.lang = lang
 		self.program_files = program_files
-		self.results = []
+		self.__results = []
 
 	def __submitFiles(self):
 		"""
 		Submit Program Files to Moss
 		"""
-		m = mosspy.Moss(self.user_id, self.lang)
+		m = mosspy.Moss(self.__user_id, self.lang)
 		for item in self.program_files:
 			m.addFile(item)
 		self.url = m.send()
@@ -67,17 +67,19 @@ class check:
 		"""
 		cols = []
 		data = []
-		
+
 		res = requests.get(url, headers={'User-Agent': 'Mozilla/5.0'})
 		html = bs(res.text, "lxml")
 
 		table = html.find_all('table')[0]
-
 		rows = table.find_all('tr')
 
 		for row in rows:
 			cols = row.find_all('td')
 			for element in cols:
+				if element.a != None:
+					diff_results = self.__getLineNumbers(element.a.get('href'))
+
 				data.append(element.text.strip())
 			
 			if len(data) != 0:
@@ -87,17 +89,14 @@ class check:
 					file1 = data[0].split(' ')[0],
 					file2 = data[1].split(' ')[0],
 					percentage = perc,
-					no_of_lines_matched = int(data[2])
+					no_of_lines_matched = int(data[2]),
+					lines_matched = diff_results
 				)
-				self.results.append(result_dict)
+				self.__results.append(result_dict)
 
 			data.clear()
-			# for link in columns:
-			# 	if link.a != None:
-			# 		result_link = link.a["href"]
-			# 		diff_link.append(result_link)
 
-		return self.results
+		return self.__results
 	
 	def getURL(self):
 		"""
