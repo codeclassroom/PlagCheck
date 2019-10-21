@@ -12,10 +12,6 @@ p = plagcheck.check(program_files, language, userid)
 
 results = p.getResults()
 url = p.getURL()
-date, time = p.getDateTime()
 
 print(url)
 print(results)
-
-print(date)
-print(time)

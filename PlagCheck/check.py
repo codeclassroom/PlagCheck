@@ -1,6 +1,7 @@
 import os
 import re
 import datetime
+from pytz import timezone
 import requests
 import mosspy
 from bs4 import BeautifulSoup as bs
@@ -60,19 +61,6 @@ class check:
 		return list_of_line_nos
 
 
-	def getDateTime(self):
-		"""
-		Ex : Thu Oct 3 00:16:17 PDT 2019
-		timezone is sill PDT, need to change
-		"""
-		date = self.date_time[0:18] + self.date_time[23:len(self.date_time)]
-		date_time_obj = datetime.datetime.strptime(
-			str(date), '%c')
-		date = str(date_time_obj.date())
-		time = str(date_time_obj.time())
-		return date, time
-
-
 	def __extractInfo(self, url):
 		"""
 		Scrape the webpage for file names, percentage match etc.
@@ -82,10 +70,6 @@ class check:
 		
 		res = requests.get(url, headers={'User-Agent': 'Mozilla/5.0'})
 		html = bs(res.text, "lxml")
-
-		date_time = html.find_all('p')[0]
-		date_time = " ".join(date_time.text.split())
-		self.date_time = date_time
 
 		table = html.find_all('table')[0]
 

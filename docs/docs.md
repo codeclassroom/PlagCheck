@@ -7,11 +7,9 @@
   {
     "file1":"filename1.py",
     "file2":"filename2.py",
-    "percentage":"34",
-    "lines_matched":[["2-3", "10-11"]],
-    "date":"2019-10-03",
-    "time":"05:48:01",
-    "url":"https://mossresults/..."
+    "percentage": 34,
+    "no_of_lines_matched": 3,
+    "lines_matched":[["2-3", "10-11"]]
   },
 ....
 ]
@@ -37,10 +35,7 @@ It is the the percentage of the code in one file considered to match code in the
 
 > For both measures(*lines_matched* & *percentage*), higher numbers mean more code matches.
 
-4. **date** & **time** : 
-Date and Time of the submission of files to MOSS server. The Timezone is currently PDT.
-
-5. **url** : 
+- **url** : 
 The homepage link of the results for each submission to MOSS.
 
 

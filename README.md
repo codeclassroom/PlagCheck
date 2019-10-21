@@ -77,15 +77,14 @@ Fetch the URL and gather following results:
 - [x] Number of Lines Matched
 - [x] URL itself
 - [ ] Lines Matched
-- [ ] Date/Time of submission
-- [ ] Convert Time to IST.
 - [x] Return a list of dictionaries containing:
     ```json
     [
       {
         "file1":"filename1.py",
         "file2":"filename2.py",
-        "percentage":"34",
+        "percentage": 34,
+        "no_of_lines_matched": 3,
         "lines_matched":[["2-3", "10-11"]]
       },
     ....
