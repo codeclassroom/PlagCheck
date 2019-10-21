@@ -1,5 +1,7 @@
 import os
 import PlagCheck.check as plagcheck
+from dotenv import load_dotenv
+load_dotenv()
 
 userid = os.environ['USER_ID']
 
@@ -8,7 +10,12 @@ language = "Python"
 
 p = plagcheck.check(program_files, language, userid)
 
-results, url = p.getResults()
+results = p.getResults()
+url = p.getURL()
+date, time = p.getDateTime()
 
 print(url)
 print(results)
+
+print(date)
+print(time)

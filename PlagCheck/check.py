@@ -4,8 +4,6 @@ import datetime
 import requests
 import mosspy
 from bs4 import BeautifulSoup as bs
-from dotenv import load_dotenv
-load_dotenv()
 
 
 class check:
@@ -14,26 +12,26 @@ class check:
 	def __init__(self, program_files, lang, user_id):
 		self.user_id = user_id
 		self.lang = lang
-		self. program_files = program_files
+		self.program_files = program_files
 		self.results = []
 
-	def submitFiles(self):
+	def __submitFiles(self):
 		"""
-		Get Moss Results Report URL
+		Submit Program Files to Moss
 		"""
 		m = mosspy.Moss(self.user_id, self.lang)
 		for item in self.program_files:
 			m.addFile(item)
-		url = m.send()
-		return url
+		self.url = m.send()
+		return self.url
 
-	def downloadReport(self, url):
+	def downloadReport(self):
 		"""
 		Download whole report locally including code diff links
 		"""
-		mosspy.download_report(url, "submission/report/", connections=8)
+		mosspy.download_report(self.url, "submission/report/", connections=8)
 
-	def getLineNumbers(self, diff_link):
+	def __getLineNumbers(self, diff_link):
 		"""
 		Get Line Numbers which are same
 		"""
@@ -62,12 +60,12 @@ class check:
 		return list_of_line_nos
 
 
-	def getFormattedDate(self, date_time):
+	def getDateTime(self):
 		"""
 		Ex : Thu Oct 3 00:16:17 PDT 2019
 		timezone is sill PDT, need to change
 		"""
-		date = date_time[0:18] + date_time[23:len(date_time)]
+		date = self.date_time[0:18] + self.date_time[23:len(self.date_time)]
 		date_time_obj = datetime.datetime.strptime(
 			str(date), '%c')
 		date = str(date_time_obj.date())
@@ -75,9 +73,9 @@ class check:
 		return date, time
 
 
-	def extractInfo(self, url):
+	def __extractInfo(self, url):
 		"""
-		Scrape the webpage for percentage match etc.
+		Scrape the webpage for file names, percentage match etc.
 		"""
 		cols = []
 		data = []
@@ -87,6 +85,7 @@ class check:
 
 		date_time = html.find_all('p')[0]
 		date_time = " ".join(date_time.text.split())
+		self.date_time = date_time
 
 		table = html.find_all('table')[0]
 
@@ -115,10 +114,18 @@ class check:
 			# 		diff_link.append(result_link)
 
 		return self.results
-
+	
+	def getURL(self):
+		"""
+		Get Moss Results Report URL
+		"""
+		return self.url
 
 	def getResults(self):
-		url = self.submitFiles()
-		results = self.extractInfo(url)
+		"""
+		Returns a List of Dictionaries
+		"""
+		url = self.__submitFiles()
+		results = self.__extractInfo(url)
 
-		return results, url
+		return results
