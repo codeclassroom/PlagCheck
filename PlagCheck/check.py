@@ -2,8 +2,6 @@
 import re
 import requests
 import mosspy  # type: ignore
-
-
 from bs4 import BeautifulSoup as bs  # type: ignore
 
 
@@ -74,7 +72,11 @@ def __extract_info(url: str) -> list:
         # get filename from second column
         filename2, ________ = col2.text.strip().split()
         # parse raw percentage from "(45%)" to 45
-        perc = int(re.search(r"\((\d+)%\)$", perc_str).group(1))
+        match = re.search(r"\((\d+)%\)$", perc_str)
+        if match:
+            perc = int(match.group(1))
+        else:
+            raise ValueError("cannot find percentage in table. See " + url)
         result_dict = dict(
             file1=filename1,
             file2=filename2,
