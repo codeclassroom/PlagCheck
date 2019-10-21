@@ -1,114 +1,86 @@
-import os
+"""The MOSS interface package for CodeClassroom"""
 import re
-import datetime
-from pytz import timezone
 import requests
-import mosspy
-from bs4 import BeautifulSoup as bs
+import mosspy  # type: ignore
 
 
-class check:
-	results = []
-
-	def __init__(self, program_files, lang, user_id):
-		self.__user_id = user_id
-		self.lang = lang
-		self.program_files = program_files
-		self.__results = []
-
-	def __submitFiles(self):
-		"""
-		Submit Program Files to Moss
-		"""
-		m = mosspy.Moss(self.__user_id, self.lang)
-		for item in self.program_files:
-			m.addFile(item)
-		self.url = m.send()
-		return self.url
-
-	def downloadReport(self):
-		"""
-		Download whole report locally including code diff links
-		"""
-		mosspy.download_report(self.url, "submission/report/", connections=8)
-
-	def __getLineNumbers(self, diff_link):
-		"""
-		Get Line Numbers which are same
-		"""
-		line_nos = []
-		list_of_line_nos = []
-		page_name = diff_link.split('/')[5].split('.')[0]
-		top_frame_name = "-top.html"
-		result_link = "http://moss.stanford.edu/results/"
-		result_id = diff_link.split('/')[4] + "/"
-		result_page = result_link + result_id + page_name + top_frame_name
-		
-		res = requests.get(result_page, headers={'User-Agent': 'Mozilla/5.0'})
-		
-		html = bs(res.text, "lxml")
-		table = html.find_all('table')[0]
-		rows = table.find_all('tr')
-
-		for row in rows:
-			columns = row.find_all('td')
-			for filename in columns:
-				if filename.text.strip() != '':
-					line_nos.append(filename.text.strip())
-			if line_nos not in list_of_line_nos:
-				list_of_line_nos.append(line_nos)
-		
-		return list_of_line_nos
+from bs4 import BeautifulSoup as bs  # type: ignore
 
 
-	def __extractInfo(self, url):
-		"""
-		Scrape the webpage for file names, percentage match etc.
-		"""
-		cols = []
-		data = []
+def download_report(url: str):
+    """Download whole report locally including code diff links"""
+    mosspy.download_report(url, "submission/report/", connections=8)
 
-		res = requests.get(url, headers={'User-Agent': 'Mozilla/5.0'})
-		html = bs(res.text, "lxml")
 
-		table = html.find_all('table')[0]
-		rows = table.find_all('tr')
+def check(program_files: list, lang: str, user_id: str) -> tuple:
+    """Check files for same lines"""
+    moss = mosspy.Moss(user_id, lang)
+    for item in program_files:
+        moss.addFile(item)
+    url = moss.send()
+    results = __extract_info(url)
+    return url, results
 
-		for row in rows:
-			cols = row.find_all('td')
-			for element in cols:
-				if element.a != None:
-					diff_results = self.__getLineNumbers(element.a.get('href'))
 
-				data.append(element.text.strip())
-			
-			if len(data) != 0:
-				perc = re.findall(r'\d+', data[0]) 
-				perc = int(list(map(int, perc))[0])
-				result_dict = dict(
-					file1 = data[0].split(' ')[0],
-					file2 = data[1].split(' ')[0],
-					percentage = perc,
-					no_of_lines_matched = int(data[2]),
-					lines_matched = diff_results
-				)
-				self.__results.append(result_dict)
+def __get_line_numbers(url: str) -> list:
+    """Get Line Numbers which are same"""
 
-			data.clear()
+    list_of_line_nos = []
+    result_page = re.sub(r".html$", "-top.html", url)
 
-		return self.__results
-	
-	def getURL(self):
-		"""
-		Get Moss Results Report URL
-		"""
-		return self.url
+    res = requests.get(result_page, headers={"User-Agent": "Mozilla/5.0"})
+    html = bs(res.text, "lxml")
+    table = html.find("table")
+    # skip header
+    for row in table.find_all("tr")[1:]:
+        matched_lines = []
+        for line_nos in row.find_all("td"):
+            line_nos = line_nos.text.strip()
+            if line_nos:
+                matched_lines.append(line_nos)
+        list_of_line_nos.append(matched_lines)
+    return list_of_line_nos
 
-	def getResults(self):
-		"""
-		Returns a List of Dictionaries
-		"""
-		url = self.__submitFiles()
-		results = self.__extractInfo(url)
 
-		return results
+def __extract_info(url: str) -> list:
+    """Scrape the webpage for file names, percentage match etc."""
+    results = []
+    res = requests.get(url, headers={"User-Agent": "Mozilla/5.0"})
+    html = bs(res.text, "lxml")
+    table = html.find("table")
+    # table looks like this
+    # <TABLE>
+    # <TR><TH>File 1<TH>File 2<TH>Lines Matched
+    # <TR>
+    #     <TD><A HREF="http://.../match0.html">testfiles/test_java2.java (92%)</A>
+    #     <TD><A HREF="http://.../match0.html">testfiles/test_java3.java (46%)</A>
+    #     <TD ALIGN=right>9
+    # <TR>
+    #     <TD><A HREF="http://.../match1.html">testfiles/test_java.java (87%)</A>
+    #     <TD><A HREF="http://.../match1.html">testfiles/test_java3.java (45%)</A>
+    #     <TD ALIGN=right>8
+    # </TABLE>
+    # in order to parse this table we need:
+    # skip header
+    for row in table.find_all("tr")[1:]:
+        # put each column in separate varible
+        col1, col2, col3 = row.find_all("td")
+        # get matched line ranges from reference from first column
+        line_numbers = __get_line_numbers(col1.a.get("href"))
+        # get total number of matched lines
+        no_of_lines_matched = int(col3.text.strip())
+        # get filename and raw percentage stirng from first column
+        filename1, perc_str = col1.text.strip().split()
+        # get filename from second column
+        filename2, ________ = col2.text.strip().split()
+        # parse raw percentage from "(45%)" to 45
+        perc = int(re.search(r"\((\d+)%\)$", perc_str).group(1))
+        result_dict = dict(
+            file1=filename1,
+            file2=filename2,
+            percentage=perc,
+            no_of_lines_matched=no_of_lines_matched,
+            lines_matched=line_numbers,
+        )
+        results.append(result_dict)
+    return results
