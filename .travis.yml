@@ -1,0 +1,15 @@
+language: python
+python:
+  - "3.6"
+  - "3.7"
+  - "3.8"
+
+install:
+  - pip install -r requirements.txt
+  - pip install isort black pyflakes
+script:
+  - pytest
+  - isort --check-only --recursive plagcheck
+  - black --check --diff plagcheck
+  - flake8 plagcheck --max-line-length=88
+  - pylint plagcheck --disable=bad-continuation,invalid-name
