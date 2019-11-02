@@ -1,5 +1,9 @@
 # PlagCheck ✅
-[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors)
+[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=plastic)](#contributors)
+[![GitHub license](https://img.shields.io/github/license/codeclassroom/PlagCheck)](https://github.com/codeclassroom/CodeRunner/blob/master/LICENSE)
+[![GitHub issues](https://img.shields.io/github/issues/codeclassroom/PlagCheck?color=blueviolet)](https://github.com/codeclassroom/CodeRunner/issues)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-orange.svg)](http://makeapullrequest.com)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/m/codeclassroom/PlagCheck?style=plastic)
 
 The MOSS interface package for CodeClassroom
 
