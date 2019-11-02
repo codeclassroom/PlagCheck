@@ -1,75 +1,71 @@
 # PlagCheck ✅
+
 The MOSS interface package for CodeClassroom
 
-### Installation 🔮
+## Installation 🔮
 
 1. Create virtual environment.
 
     **Linux/MacOS**
+
     ```bash
     virtualenv -p python3 venv && cd venv && source bin/activate
     ```
+
     **Windows**
     (*PowerShell*)
+
     ```cmd
     py -m venv venv; .\venv\Scripts\activate;
     ```
 
 2. Clone the repository.
 
-```bash
-git clone https://github.com/codeclassroom/PlagCheck.git
-```    
+    ```bash
+    git clone https://github.com/codeclassroom/PlagCheck.git
+    ```
 
 3. Install dependencies.
 
-```bash
-pip install -r requirements.txt
-```
+    ```bash
+    pip install -r requirements.txt
+    ```
 
 4. Set-up virtual environment variables.
     1. Create a file named `.env` in the root directory & add the following contents.
-    
-    ```text
-    USER_ID = 'moss-user-id'
-    ```
+
+        ```text
+        USER_ID = 'moss-user-id'
+        ```
+
     2. For `USER_ID` read instructions on [Moss](http://theory.stanford.edu/~aiken/moss/).
 
 5. Run `demo.py` for demo.
 
-
-### Usage
+## Usage
 
 Import the `check` method from *PlagCheck*.
 
 ```python
 import os
-import PlagCheck.check as plagcheck
-from dotenv import load_dotenv
-load_dotenv()
+import pprint
+from plagcheck import plagcheck
 
-userid = os.environ['USER_ID']
+program_files = ["testfiles/test_python.py", "testfiles/test_python3.py"]
+language = "python"
+userid = os.environ["USER_ID"]
 
-program_files = ['testfiles/test_python.py', 'testfiles/test_python3.py']
-language = "Python"
+url, results = plagcheck.check(program_files, language, userid)
 
-p = plagcheck.check(program_files, language, userid)
-
-results = p.getResults()
-url = p.getURL()
-date, time = p.getDateTime()
 
 print(url)
-print(results)
+pprint.pprint(results)
 
-print(date)
-print(time)
 ```
 
 Read [Documentation](https://github.com/codeclassroom/PlagCheck/blob/master/docs/docs.md).
 
-
-### TODO:
+## TODO
 
 Fetch the URL and gather following results:
 
@@ -78,6 +74,7 @@ Fetch the URL and gather following results:
 - [x] URL itself
 - [x] Lines Matched*
 - [x] Return a list of dictionaries containing:
+
     ```json
     [
       {
@@ -91,8 +88,7 @@ Fetch the URL and gather following results:
     ]
     ```
 
-
-### Author
+## Author
 
 👥 **Bhupesh Varshney**
 

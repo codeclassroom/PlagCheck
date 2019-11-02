@@ -1,17 +1,14 @@
+"""Usage example"""
 import os
-import PlagCheck.check as plagcheck
-from dotenv import load_dotenv
-load_dotenv()
+import pprint
+from plagcheck import plagcheck
 
-userid = os.environ['USER_ID']
+program_files = ["testfiles/test_python.py", "testfiles/test_python3.py"]
+language = "python"
+userid = os.environ["USER_ID"]
 
-program_files = ['testfiles/test_python.py', 'testfiles/test_python3.py']
-language = "Python"
+url, results = plagcheck.check(program_files, language, userid)
 
-p = plagcheck.check(program_files, language, userid)
-
-results = p.getResults()
-url = p.getURL()
 
 print(url)
-print(results)
+pprint.pprint(results)
