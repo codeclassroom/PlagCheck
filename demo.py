@@ -2,6 +2,8 @@
 import os
 import pprint
 from plagcheck import plagcheck
+from dotenv import load_dotenv
+load_dotenv()
 
 program_files = ["testfiles/test_python.py", "testfiles/test_python3.py"]
 language = "python"
