@@ -1,0 +1,1 @@
+from plagcheck.plagcheck import check

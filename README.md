@@ -5,7 +5,7 @@
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-orange.svg)](http://makeapullrequest.com)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/codeclassroom/PlagCheck?style=plastic)
 
-The MOSS interface package for CodeClassroom
+> A Powerful [Moss](http://theory.stanford.edu/~aiken/moss/) results scrapper.
 
 ## Installation 🔮
 
@@ -70,29 +70,6 @@ pprint.pprint(results)
 ```
 
 Read [Documentation](https://github.com/codeclassroom/PlagCheck/blob/master/docs/docs.md).
-
-## TODO
-
-Fetch the URL and gather following results:
-
-- [x] Percentage of Code Matches
-- [x] Number of Lines Matched
-- [x] URL itself
-- [x] Lines Matched*
-- [x] Return a list of dictionaries containing:
-
-    ```json
-    [
-      {
-        "file1":"filename1.py",
-        "file2":"filename2.py",
-        "percentage": 34,
-        "no_of_lines_matched": 3,
-        "lines_matched":[["2-3", "10-11"]]
-      },
-    ....
-    ]
-    ```
 
 ## Author
 
