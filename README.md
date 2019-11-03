@@ -49,11 +49,17 @@
 
 ## Usage
 
+Install the package.
+
+```bash
+pip install plagcheck
+```
+
 ```python
 """Usage example"""
 import os
 import pprint
-from plagcheck import plagcheck
+import plagcheck
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -77,6 +83,7 @@ Read [Documentation](https://github.com/codeclassroom/PlagCheck/blob/master/docs
 
 - Twitter: [@bhupeshimself](https://twitter.com/bhupeshimself)
 - DEV: [bhupesh](https://dev.to/bhupesh)
+
 ## Contributors ✨
 
 Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
