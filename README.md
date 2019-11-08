@@ -1,10 +1,10 @@
 # PlagCheck ✅
+
+![PyPI](https://img.shields.io/pypi/v/plagcheck?color=blue)
 [![Build Status](https://travis-ci.org/codeclassroom/PlagCheck.svg?branch=master)](https://travis-ci.org/codeclassroom/PlagCheck)
 [![GitHub license](https://img.shields.io/github/license/codeclassroom/PlagCheck)](https://github.com/codeclassroom/CodeRunner/blob/master/LICENSE)
 [![GitHub issues](https://img.shields.io/github/issues/codeclassroom/PlagCheck?color=blueviolet)](https://github.com/codeclassroom/CodeRunner/issues)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-orange.svg)](http://makeapullrequest.com)
-![GitHub commit activity](https://img.shields.io/github/commit-activity/m/codeclassroom/PlagCheck?style=plastic)
-[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=plastic)](#contributors)
 
 > A Powerful [Moss](http://theory.stanford.edu/~aiken/moss/) results scrapper.
 
