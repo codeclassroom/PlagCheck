@@ -11,5 +11,5 @@ script:
   - pytest plagcheck
   - isort --check-only --recursive plagcheck
   - black --check --diff plagcheck
-  - flake8 plagcheck --max-line-length=88
+  - flake8 plagcheck --max-line-length=88 --ignore=F401
   - pylint plagcheck --disable=bad-continuation,invalid-name

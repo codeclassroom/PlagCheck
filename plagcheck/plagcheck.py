@@ -1,11 +1,10 @@
 """The MOSS interface package for CodeClassroom"""
-
 import re
 from typing import List, Tuple
 
-import mosspy  # type: ignore
+import mosspy
 import requests
-from bs4 import BeautifulSoup as bs  # type: ignore
+from bs4 import BeautifulSoup as bs
 
 HEADERS = {"User-Agent": "Mozilla/5.0"}
 
