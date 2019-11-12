@@ -10,7 +10,7 @@ install:
   - pip install codecov pytest-cov
 script:
   - pytest plagcheck
-  - pytest --cov=plagcheck
+  - pytest --cov=plagcheck/
   - isort --check-only --recursive plagcheck
   - black --check --diff plagcheck
   - flake8 plagcheck --max-line-length=88 --ignore=F401
