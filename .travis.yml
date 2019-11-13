@@ -7,13 +7,13 @@ python:
 install:
   - pip install -r requirements.txt
   - pip install isort black flake8 pylint
-  - pip install codecov pytest-cov
+  - pip install pytest coveralls
 script:
   - pytest plagcheck
-  - pytest --cov=plagcheck/
+  - py.test plagcheck/plagcheck_test.py
   - isort --check-only --recursive plagcheck
   - black --check --diff plagcheck
   - flake8 plagcheck --max-line-length=88 --ignore=F401
   - pylint plagcheck --disable=bad-continuation,invalid-name
 after_success:
-  - codecov
+  - coveralls
