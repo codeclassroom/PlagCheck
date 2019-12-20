@@ -1,0 +1,16 @@
+site_name: PlagCheck
+site_url: https://codeclassroom.github.io/PlagCheck/
+repo_url: https://github.com/codeclassroom/PlagCheck
+site_author: Bhupesh Varshney
+site_description: PlagCheck v0.3 Documentation
+copyright: © 2019, Bhupesh Varshney
+nav:
+    - Documentation: index.md
+    - Installation: installation.md
+    - Usage: usage.md
+    - Changelog: changelog.md
+    - About: about.md
+theme: readthedocs
+markdown_extensions:
+    - toc:
+        permalink: "#"

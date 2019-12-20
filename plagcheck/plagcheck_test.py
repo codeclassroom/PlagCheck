@@ -7,8 +7,9 @@ def test_check():
     program_files = ["testfiles/test_python.py", "testfiles/test_python3.py"]
     language = "python"
     userid = "1"
-    url, results = plagcheck.check(program_files, language, userid)
-    assert "http" in url
+    temp = plagcheck.check(program_files, language, userid)
+    results = temp.getResults()
+
     assert results == [
         {
             "file1": "testfiles/test_python.py",

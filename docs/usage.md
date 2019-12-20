@@ -47,7 +47,7 @@ The homepage link of the results for each submission to MOSS.
 
 - Moss can be more accurate if a base file is supplied. The -b option to Moss supplies a base file of code that should be ignored if it appears in programs; Moss never considers code that appears in a base file to match any other code. If your results include many unintended matches, then it is best to place all legitimately shared code in a base file (e.g., instructor-supplied code, common libraries, etc.) and resubmit the query to the server.
 
-- Moss is a computer program that detects structural similarities in programs and nothing more; it has no idea why programs may be structurally similar. As noted above, there are reasons besides plagiarism that two programs may appear the same (e.g., they are both based on the same third program, such as instructor-supplied code for an assignment). Results from Moss cannot be taken as direct evidence of plagiarism---it is still necessary for someone to examine the programs and make a judgment. 
+- Moss detects structural similarities in programs and nothing more; it has no idea why programs may be structurally similar. As noted above, there are reasons besides plagiarism that two programs may appear the same (e.g., they are both based on the same third program, such as instructor-supplied code for an assignment). Results from Moss cannot be taken as direct evidence of plagiarism---it is still necessary for someone to examine the programs and make a judgment. 
 
 ## Credits
 Moss was written and is maintained by Alex Aiken, aiken@cs.stanford.edu.

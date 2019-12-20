@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="plagcheck",
-    version="0.2",
+    version="0.3",
     author="Bhupesh Varshney",
     author_email="varshneybhupesh@gmail.com",
     description="A Powerful MOSS results scrapper",
@@ -18,10 +18,10 @@ setuptools.setup(
         "Source Code": "https://github.com/codeclassroom/PlagCheck",
         "Funding": "https://www.patreon.com/bePatron?u=18082750",
         "Say Thanks!": "https://github.com/codeclassroom/PlagCheck/issues/new?assignees=&labels=&template=---say-thank-you.md&title=",
+        "Tracker": "https://github.com/codeclassroom/PlagCheck/issues",
     },
     packages=setuptools.find_packages(),
     install_requires=[
-        'requests',
         'mosspy',
         'beautifulsoup4',
         'lxml',
