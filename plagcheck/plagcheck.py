@@ -1,7 +1,7 @@
 """The MOSS interface package for CodeClassroom"""
 import re
 from typing import List, Tuple
-
+from concurrent.futures import ThreadPoolExecutor
 import mosspy
 import urllib.request
 from bs4 import BeautifulSoup as bs
@@ -47,6 +47,7 @@ class check:
         - Language (str)
         - Moss User ID (str)
     """
+
     def __init__(self, files: list, lang: str, user_id: str):
 
         self.__user_id = user_id
@@ -71,12 +72,18 @@ class check:
             col1, col2, col3 = row.find_all("td")
             filename1, perc = col1.text.strip().split()
             filename2, ____ = col2.text.strip().split()
+
+            with ThreadPoolExecutor() as executor:
+                future = executor.submit(self.__get_line_numbers, col1.a.get("href"))
+                lines = future.result()
+
             result_dict = Result(
                 file1=filename1,
                 file2=filename2,
                 percentage=perc_str_to_int(perc),
                 no_of_lines_matched=int(col3.text.strip()),
-                lines_matched=self.__get_line_numbers(col1.a.get("href")),
+                lines_matched=lines,
+                # lines_matched=self.__get_line_numbers(col1.a.get("href")),
             )
             results.append(result_dict)
         return results
