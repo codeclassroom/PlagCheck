@@ -8,6 +8,7 @@ def test_check():
     language = "python"
     userid = "1"
     temp = plagcheck.check(program_files, language, userid)
+    temp.submit()
     results = temp.getResults()
 
     assert results == [

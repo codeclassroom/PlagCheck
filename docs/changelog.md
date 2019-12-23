@@ -4,10 +4,10 @@
 ## [0.3] - Dec x, 2019
 
 ### Added
-- New methods: `getHomePage()`, `submit()`, `getResults()`, `addBase()`. See Documentation for usage.
+- New methods: `getHomePage()`, `submit()`, `getResults()`, `addBaseCode()`. See Documentation for usage.
 
 ### Changed
-- The plagcheck module, more modularised. `check` is now a class.
+- The plagcheck module is now more modularised. `check` is now a class.
 
 ### Removed
 - `requests` as a dependency, network requests are now 50% faster.

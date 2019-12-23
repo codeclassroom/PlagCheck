@@ -8,6 +8,7 @@ nav:
     - Documentation: index.md
     - Installation: installation.md
     - Usage: usage.md
+    - Moss: moss.md
     - Changelog: changelog.md
     - About: about.md
 theme: readthedocs

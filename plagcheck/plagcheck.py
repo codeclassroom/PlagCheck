@@ -32,7 +32,21 @@ def perc_str_to_int(string: str) -> int:
     raise ValueError("Cannot find percentage in table")
 
 
+def request(url: str):
+    req = urllib.request.Request(url, headers=HEADERS)
+    with urllib.request.urlopen(req) as response:
+        req = response.read()
+
+    return req.decode("utf-8")
+
+
 class check:
+    """
+    Args:
+        - Program Files (list)
+        - Language (str)
+        - Moss User ID (str)
+    """
     def __init__(self, files: list, lang: str, user_id: str):
 
         self.__user_id = user_id
@@ -49,11 +63,9 @@ class check:
         """
         results: Results = []
 
-        req = urllib.request.Request(self.home_url, headers=HEADERS)
-        with urllib.request.urlopen(req) as response:
-            req = response.read()
+        response = request(self.home_url)
 
-        html = bs(req.decode("utf-8"), "lxml")
+        html = bs(response, "lxml")
         table = html.find("table")
         for row in table.find_all("tr")[1:]:
             col1, col2, col3 = row.find_all("td")
@@ -76,11 +88,9 @@ class check:
         list_of_line_nos: List[List[str]] = []
         result_page = re.sub(r".html$", "-top.html", url)
 
-        req = urllib.request.Request(result_page, headers=HEADERS)
-        with urllib.request.urlopen(req) as response:
-            req = response.read()
+        response = request(result_page)
 
-        html = bs(req.decode("utf-8"), "lxml")
+        html = bs(response, "lxml")
         table = html.find("table")
         for row in table.find_all("tr")[1:]:
             matched_lines: List[str] = []
@@ -91,7 +101,7 @@ class check:
             list_of_line_nos.append(matched_lines)
         return list_of_line_nos
 
-    def addBase(self, base_file: str):
+    def addBaseCode(self, base_file: str):
         """
         Add basefile
         """
@@ -117,6 +127,6 @@ class check:
         """
         Return the result as a list of dictionary
         """
-        results = self.__extract_info()
+        self.moss_results = self.__extract_info()
 
-        return results
+        return self.moss_results
