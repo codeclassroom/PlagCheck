@@ -1,9 +1,10 @@
 """The MOSS interface package for CodeClassroom"""
 import re
-from typing import List, Tuple
-from concurrent.futures import ThreadPoolExecutor
-import mosspy
 import urllib.request
+from concurrent.futures import ThreadPoolExecutor
+from typing import List, Tuple
+
+import mosspy
 from bs4 import BeautifulSoup as bs
 
 HEADERS = {"User-Agent": "Mozilla/5.0"}
@@ -23,9 +24,7 @@ Results = List[Result]
 
 
 def perc_str_to_int(string: str) -> int:
-    """
-    Convert string like "(42%)" to 42
-    """
+    """Convert string like "(42%)" to 42"""
     match = re.search(r"\((\d+)%\)$", string)
     if match:
         return int(match.group(1))
@@ -33,6 +32,7 @@ def perc_str_to_int(string: str) -> int:
 
 
 def request(url: str):
+    """Request Webpage"""
     req = urllib.request.Request(url, headers=HEADERS)
     with urllib.request.urlopen(req) as response:
         req = response.read()
@@ -59,9 +59,7 @@ class check:
         self.__moss = mosspy.Moss(self.__user_id, self.lang)
 
     def __extract_info(self) -> Results:
-        """
-        Scrape the webpage for file names, percentage match etc.
-        """
+        """Scrape the webpage for file names, percentage match etc."""
         results: Results = []
 
         response = request(self.home_url)
@@ -89,9 +87,7 @@ class check:
         return results
 
     def __get_line_numbers(self, url: str) -> List[List[str]]:
-        """
-        Get Line Numbers which are same
-        """
+        """Get Line Numbers which are same"""
         list_of_line_nos: List[List[str]] = []
         result_page = re.sub(r".html$", "-top.html", url)
 
@@ -109,15 +105,11 @@ class check:
         return list_of_line_nos
 
     def addBaseCode(self, base_file: str):
-        """
-        Add basefile
-        """
+        """Add basefile"""
         self.__moss.addBaseFile(base_file)
 
     def submit(self):
-        """
-        Submit files to the Moss Server
-        """
+        """Submit files to the Moss Server"""
         for item in self.files:
             self.__moss.addFile(item)
         url = self.__moss.send()
@@ -125,15 +117,11 @@ class check:
         self.home_url = url
 
     def getHomePage(self):
-        """
-        Return Moss Results HomePage URL
-        """
+        """Return Moss Results HomePage URL"""
         return self.home_url
 
     def getResults(self) -> Tuple[str, Results]:
-        """
-        Return the result as a list of dictionary
-        """
+        """Return the result as a list of dictionary"""
         self.moss_results = self.__extract_info()
 
         return self.moss_results
