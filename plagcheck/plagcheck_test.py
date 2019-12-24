@@ -7,7 +7,9 @@ def test_check():
     program_files = ["testfiles/test_python.py", "testfiles/test_python3.py"]
     language = "python"
     userid = "1"
-    temp = plagcheck.check(program_files, language, userid)
+    temp = plagcheck.check(language, userid)
+    temp.addFile("testfiles/test_python.py")
+    temp.addFile("testfiles/test_python3.py")
     temp.submit()
     results = temp.getResults()
 

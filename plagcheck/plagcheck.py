@@ -3,7 +3,7 @@ import re
 import urllib.request
 from concurrent.futures import ThreadPoolExecutor
 from typing import List, Tuple
-
+import collections
 import mosspy
 from bs4 import BeautifulSoup as bs
 
@@ -48,10 +48,9 @@ class check:
         - Moss User ID (str)
     """
 
-    def __init__(self, files: list, lang: str, user_id: str):
+    def __init__(self, lang: str, user_id: str):
 
         self.__user_id = user_id
-        self.files = files
         languages = mosspy.Moss.languages
         if lang not in languages:
             raise ValueError(f"{lang} is not a supported language {languages}")
@@ -104,14 +103,18 @@ class check:
             list_of_line_nos.append(matched_lines)
         return list_of_line_nos
 
+    def addFilesByWildCard(self, file):
+        self.__moss.addFilesByWildcard(file)
+
+    def addFile(self, file):
+        self.__moss.addFile(file)
+
     def addBaseCode(self, base_file: str):
         """Add basefile"""
         self.__moss.addBaseFile(base_file)
 
     def submit(self):
         """Submit files to the Moss Server"""
-        for item in self.files:
-            self.__moss.addFile(item)
         url = self.__moss.send()
 
         self.home_url = url
@@ -125,3 +128,22 @@ class check:
         self.moss_results = self.__extract_info()
 
         return self.moss_results
+
+    def getInsights(self):
+        """Share Score Insights WIP"""
+        similar_code_files = []
+        for result in self.moss_results:
+            similar_code_files.append(result['file1'])
+            similar_code_files.append(result['file2'])
+
+        # count of files which are similar
+        share_score = collections.Counter(similar_code_files)
+
+        # code which has been similar to most of the files
+        distributor_score = max(share_score.values())
+
+        for key, value in share_score.items():
+            if value == distributor_score:
+                distributor = key
+
+        return dict(share_score)
