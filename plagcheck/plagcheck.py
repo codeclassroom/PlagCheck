@@ -67,8 +67,8 @@ class check:
         table = html.find("table")
         for row in table.find_all("tr")[1:]:
             col1, col2, col3 = row.find_all("td")
-            filename1, perc = col1.text.strip().split()
-            filename2, ____ = col2.text.strip().split()
+            filename1, perc1 = col1.text.strip().split()
+            filename2, perc2 = col2.text.strip().split()
 
             with ThreadPoolExecutor() as executor:
                 future = executor.submit(self.__get_line_numbers, col1.a.get("href"))
@@ -77,7 +77,8 @@ class check:
             result_dict = Result(
                 file1=filename1,
                 file2=filename2,
-                percentage=perc_str_to_int(perc),
+                percentage_file1=perc_str_to_int(perc1),
+                percentage_file2=perc_str_to_int(perc2),
                 no_of_lines_matched=int(col3.text.strip()),
                 lines_matched=lines,
                 # lines_matched=self.__get_line_numbers(col1.a.get("href")),
@@ -103,8 +104,8 @@ class check:
             list_of_line_nos.append(matched_lines)
         return list_of_line_nos
 
-    def addFilesByWildCard(self, file):
-        self.__moss.addFilesByWildcard(file)
+    def addFilesByWildCard(self, files):
+        self.__moss.addFilesByWildcard(files)
 
     def addFile(self, file):
         self.__moss.addFile(file)
@@ -118,6 +119,7 @@ class check:
         url = self.__moss.send()
 
         self.home_url = url
+        self.moss_results = self.__extract_info()
 
     def getHomePage(self):
         """Return Moss Results HomePage URL"""
@@ -125,25 +127,37 @@ class check:
 
     def getResults(self) -> Tuple[str, Results]:
         """Return the result as a list of dictionary"""
-        self.moss_results = self.__extract_info()
 
         return self.moss_results
 
-    def getInsights(self):
+    def getShareScores(self):
         """Share Score Insights WIP"""
         similar_code_files = []
+        culprits = []
         for result in self.moss_results:
             similar_code_files.append(result['file1'])
             similar_code_files.append(result['file2'])
 
-        # count of files which are similar
+        # frequency of files which are similar
         share_score = collections.Counter(similar_code_files)
 
-        # code which has been similar to most of the files
+        # code which is similar to most of the files
         distributor_score = max(share_score.values())
 
         for key, value in share_score.items():
             if value == distributor_score:
-                distributor = key
+                self.__distributors = key
+            else:
+                culprits.append(key)
+
+        self.__culprits = culprits
 
         return dict(share_score)
+
+    def getDistributors(self):
+        """Potential distributor who shared their code"""
+        return self.__distributors
+
+    def getCulprits(self):
+        """Potential Culprits who copied the code"""
+        return self.__culprits
