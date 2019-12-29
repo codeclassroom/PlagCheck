@@ -39,6 +39,30 @@ class Mgroup:
         for node in self.nodes:
             print(node.name, "tag: ", node.tag)
 
+    def d2c(self):
+        result = ""
+        for node in self.nodes:
+            for link in node.links:
+                if node.tag == "D" and link.tag == "C":
+                    result += "{0} --> {1}\n".format(node.name, link.name)
+        return result
+
+    def d2dc(self):
+        result = ""
+        for node in self.nodes:
+            for link in node.links:
+                if node.tag == "D" and link.tag == "DC":
+                    result += "{0} --> {1}\n".format(node.name, link.name)
+        return result
+
+    def dc2c(self):
+        result = ""
+        for node in self.nodes:
+            for link in node.links:
+                if node.tag == "DC" and link.tag == "C":
+                    result += "{0} --> {1}\n".format(node.name, link.name)
+        return result
+
     def __repr__(self):
         result = ""
         for node in self.nodes:
@@ -48,13 +72,15 @@ class Mgroup:
 
 
 mg = Mgroup()
-n0 = mg.addNode({'name': 'A', 'perc': 45})
+n0 = mg.addNode({'name': 'A', 'perc': 36})
 n1 = mg.addNode({'name': 'B', 'perc': 50})
-n2 = mg.addNode({'name': 'C', 'perc': 34})
+n2 = mg.addNode({'name': 'C', 'perc': 74})
 
 n0.addEdge(n1)
-n1.addEdge(n2)
-n2.addEdge(n0)
+n0.addEdge(n2)
+
 
 print(mg)
-mg.allNodes()
+print("D to C paths\n", mg.d2c())
+print("D to DC paths\n", mg.d2dc())
+# mg.allNodes()
