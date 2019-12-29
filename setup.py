@@ -6,10 +6,11 @@ with open("README.md", "r") as fh:
 setuptools.setup(
     name="plagcheck",
     version="0.3",
+    license="MIT",
     author="Bhupesh Varshney",
     author_email="varshneybhupesh@gmail.com",
-    description="A Powerful MOSS results scrapper",
-    keywords='mosspy moss plagiarism cheat',
+    description="Check your programs for plagiarism",
+    keywords="moss plagiarism mosspy cheat",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/codeclassroom/PlagCheck",

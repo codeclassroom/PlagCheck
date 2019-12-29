@@ -71,7 +71,8 @@ class check:
             filename2, perc2 = col2.text.strip().split()
 
             with ThreadPoolExecutor() as executor:
-                future = executor.submit(self.__get_line_numbers, col1.a.get("href"))
+                future = executor.submit(
+                    self.__get_line_numbers, col1.a.get("href"))
                 lines = future.result()
 
             result_dict = Result(
@@ -133,7 +134,6 @@ class check:
     def getShareScores(self):
         """Share Score Insights WIP"""
         similar_code_files = []
-        culprits = []
         for result in self.moss_results:
             similar_code_files.append(result['file1'])
             similar_code_files.append(result['file2'])
@@ -141,23 +141,4 @@ class check:
         # frequency of files which are similar
         share_score = collections.Counter(similar_code_files)
 
-        # code which is similar to most of the files
-        distributor_score = max(share_score.values())
-
-        for key, value in share_score.items():
-            if value == distributor_score:
-                self.__distributors = key
-            else:
-                culprits.append(key)
-
-        self.__culprits = culprits
-
         return dict(share_score)
-
-    def getDistributors(self):
-        """Potential distributor who shared their code"""
-        return self.__distributors
-
-    def getCulprits(self):
-        """Potential Culprits who copied the code"""
-        return self.__culprits
