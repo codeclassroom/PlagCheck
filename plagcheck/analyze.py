@@ -4,23 +4,25 @@ class Mgroup:
 
     class Node:
 
-        def __init__(self, name, perc):
+        def __init__(self, name):
             self.name = name
-            self.perc = perc
+            self.perc = []
             self.links = []
             self.visited = False
 
-        def addEdge(self, node):
-            if self.perc < node.perc:
+        def addEdge(self, P1, P2, node):
+            if P1 < P2:
                 self.tag = "D"
                 node.tag = "C"
-            elif self.perc > node.perc:
+            elif P1 > P2:
                 self.tag = "C"
                 node.tag = "D"
             else:
                 self.tag = "DC"
                 node.tag = "DC"
 
+            self.perc.append(P1)
+            node.perc.append(P2)
             self.links.append(node)
             Mgroup.linkCount += 1
 
@@ -28,59 +30,46 @@ class Mgroup:
         self.nodes = []
         self.nodeCount = 0
 
-    def addNode(self, data: dict):
-        if data not in self.nodes:
-            node = self.Node(data['name'], data['perc'])
+    def addNode(self, name: str):
+        if name not in self.nodes:
+            node = self.Node(name)
             self.nodes.append(node)
             self.nodeCount += 1
         return node
 
     def allNodes(self):
-        for node in self.nodes:
-            print(node.name, "tag: ", node.tag)
+        return [r.name for r in self.nodes]
 
     def d2c(self):
-        result = ""
+        # All Direct Distributor to Culprit paths
+        paths = []
         for node in self.nodes:
             for link in node.links:
                 if node.tag == "D" and link.tag == "C":
-                    result += "{0} --> {1}\n".format(node.name, link.name)
-        return result
+                    paths.append(tuple((node.name, link.name)))
+        return paths
 
     def d2dc(self):
-        result = ""
+        # All Direct Distributor to potential Distributor-Culprit paths
+        paths = []
         for node in self.nodes:
             for link in node.links:
                 if node.tag == "D" and link.tag == "DC":
-                    result += "{0} --> {1}\n".format(node.name, link.name)
-        return result
+                    paths.append(tuple((node.name, link.name)))
+        return paths
 
     def dc2c(self):
-        result = ""
+        # All potential Distributor-Culprit to direct Culprit paths
+        paths = []
         for node in self.nodes:
             for link in node.links:
                 if node.tag == "DC" and link.tag == "C":
-                    result += "{0} --> {1}\n".format(node.name, link.name)
-        return result
+                    paths.append(tuple((node.name, link.name)))
+        return paths
 
     def __repr__(self):
-        result = ""
+        paths = ""
         for node in self.nodes:
             for link in node.links:
-                result += "{0} --> {1}\n".format(node.name, link.name)
-        return result
-
-
-mg = Mgroup()
-n0 = mg.addNode({'name': 'A', 'perc': 36})
-n1 = mg.addNode({'name': 'B', 'perc': 50})
-n2 = mg.addNode({'name': 'C', 'perc': 74})
-
-n0.addEdge(n1)
-n0.addEdge(n2)
-
-
-print(mg)
-print("D to C paths\n", mg.d2c())
-print("D to DC paths\n", mg.d2dc())
-# mg.allNodes()
+                paths += "{0} --> {1}\n".format(node.name, link.name)
+        return paths
