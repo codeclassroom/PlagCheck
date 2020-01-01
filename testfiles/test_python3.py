@@ -1,3 +1,3 @@
-name = str(input()) 
+name = str(input())
 print("Hello, " + name)
 print("Yoo")

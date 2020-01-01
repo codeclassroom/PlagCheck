@@ -1,6 +1,6 @@
 ---
 name: "\U0001F49F Say thank you"
-about: Just say thanks if you liked tutorialdb
+about: Just say thanks if you liked PlagCheck
 title: ''
 labels: ''
 assignees: ''

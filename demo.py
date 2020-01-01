@@ -2,15 +2,25 @@
 import os
 import pprint
 from plagcheck import plagcheck
+
 from dotenv import load_dotenv
 load_dotenv()
 
-program_files = ["testfiles/test_python.py", "testfiles/test_python3.py"]
 language = "python"
 userid = os.environ["USER_ID"]
 
-url, results = plagcheck.check(program_files, language, userid)
 
+moss = plagcheck.check(language, userid)
 
-print(url)
-pprint.pprint(results)
+moss.addFilesByWildCard("testfiles/test_python*.py")
+
+# or moss.addFile("testfiles/test_python.py")
+
+moss.submit()
+
+print(moss.getHomePage())
+pprint.pprint(moss.getResults())
+# print frequency of each shared solution
+pprint.pprint(moss.getShareScores())
+# print potential distributor-culprit relationships
+pprint.pprint(moss.getInsights())
