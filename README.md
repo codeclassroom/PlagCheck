@@ -6,7 +6,7 @@
 [![Build Status](https://travis-ci.org/codeclassroom/PlagCheck.svg?branch=master)](https://travis-ci.org/codeclassroom/PlagCheck)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/plagcheck)
 [![Documentation Status](https://readthedocs.org/projects/plagcheck/badge/?version=latest)](https://plagcheck.readthedocs.io/en/latest/?badge=latest)
-![PyPI - License](https://img.shields.io/pypi/l/plagcheck)
+![PyPI - License](https://img.shields.io/pypi/l/plagcheck?color=orange)
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/plagcheck?color=blue)
 
 
@@ -77,7 +77,7 @@ git https://github.com/codeclassroom/PlagCheck.git
 ```
 3. Install Dependencies.
 ```bash
-pip install -r requirements.txt
+pip install -r requirements-dev.txt
 ```
 4. Run tests.
 ```bash
