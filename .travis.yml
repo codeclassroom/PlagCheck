@@ -14,6 +14,6 @@ script:
   - isort --check-only --recursive plagcheck
   - black --check --diff plagcheck
   - flake8 plagcheck --max-line-length=88 --ignore=F401
-  - pylint plagcheck --disable=bad-continuation,invalid-name,attribute-defined-outside-init,no-self-use,too-many-locals
+  - pylint plagcheck --disable=bad-continuation,invalid-name,attribute-defined-outside-init,no-self-use,too-many-locals,too-few-public-methods
 after_success:
   - coveralls

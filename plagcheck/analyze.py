@@ -14,6 +14,10 @@ class Node:
         self.tag = None
         self.links = []
 
+    def pointTo(self):
+        """Return all nodes a node points to"""
+        return [link.name for link in self.links]
+
 
 class Mgroups:
     """A Disconnected directed graph consisting all individual solutions"""
@@ -44,8 +48,8 @@ class Mgroups:
     def __indegree(self, node: Node):
         indegree_count = 0
         for n in self.nodes:
-            for link in n.links:
-                if link.name == node.name:
+            for link in n.pointTo():
+                if link == node.name:
                     indegree_count += 1
         return indegree_count
 
@@ -71,6 +75,7 @@ class Mgroups:
             self.addNode(n)
 
     def addNode(self, name: str):
+        """Add a single node to graph"""
         if name not in [r.name for r in self.nodes]:
             node = Node(name)
             self.nodes.append(node)
@@ -78,6 +83,7 @@ class Mgroups:
         return node
 
     def displayNodes(self):
+        """Return all nodes in the graph"""
         return [r.name for r in self.nodes]
 
     def displayTags(self):

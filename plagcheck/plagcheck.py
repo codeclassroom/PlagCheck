@@ -1,11 +1,13 @@
 """The MOSS interface package for CodeClassroom"""
+import collections
 import re
 import urllib.request
 from concurrent.futures import ThreadPoolExecutor
 from typing import List, Tuple
-import collections
+
 import mosspy
 from bs4 import BeautifulSoup as bs
+
 from plagcheck.analyze import Mgroups
 
 HEADERS = {"User-Agent": "Mozilla/5.0"}
@@ -106,9 +108,11 @@ class check:
         return list_of_line_nos
 
     def addFilesByWildCard(self, files):
+        """Add multiple files"""
         self.__moss.addFilesByWildcard(files)
 
     def addFile(self, file):
+        """Add a single file for submission"""
         self.__moss.addFile(file)
 
     def addBaseCode(self, base_file: str):
@@ -156,7 +160,11 @@ class check:
         mg.createNodes(similar_code_files)
 
         for r in self.moss_results:
-            mg.relatesTo(r['percentage_file1'], r['percentage_file2'], r['file1'], r['file2'])
+            mg.relatesTo(
+                r['percentage_file1'],
+                r['percentage_file2'],
+                r['file1'], r['file2']
+            )
 
         mg.set_tags()
 
