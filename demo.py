@@ -20,4 +20,7 @@ moss.submit()
 
 print(moss.getHomePage())
 pprint.pprint(moss.getResults())
-#pprint.pprint(moss.getShareScores()
+# print frequency of each shared solution
+pprint.pprint(moss.getShareScores())
+# print potential distributor-culprit relationships
+pprint.pprint(moss.getInsights())

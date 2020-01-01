@@ -42,6 +42,7 @@ class Mgroups:
                 node_obj_dict[node2].links.append(node_obj_dict[node1])
             else:
                 node_obj_dict[node1].links.append(node_obj_dict[node2])
+                node_obj_dict[node2].links.append(node_obj_dict[node1])
 
         Mgroups.linkCount += 1
 
