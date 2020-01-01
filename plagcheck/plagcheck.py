@@ -74,8 +74,7 @@ class check:
             filename2, perc2 = col2.text.strip().split()
 
             with ThreadPoolExecutor() as executor:
-                future = executor.submit(
-                    self.__get_line_numbers, col1.a.get("href"))
+                future = executor.submit(self.__get_line_numbers, col1.a.get("href"))
                 lines = future.result()
 
             result_dict = Result(
@@ -139,8 +138,8 @@ class check:
         """Share Score Insights"""
         similar_code_files = []
         for result in self.moss_results:
-            similar_code_files.append(result['file1'])
-            similar_code_files.append(result['file2'])
+            similar_code_files.append(result["file1"])
+            similar_code_files.append(result["file2"])
 
         # frequency of files which are similar
         share_score = collections.Counter(similar_code_files)
@@ -154,16 +153,14 @@ class check:
         insights = {}
 
         for r in self.moss_results:
-            similar_code_files.add(r['file1'])
-            similar_code_files.add(r['file2'])
+            similar_code_files.add(r["file1"])
+            similar_code_files.add(r["file2"])
 
         mg.createNodes(similar_code_files)
 
         for r in self.moss_results:
             mg.relatesTo(
-                r['percentage_file1'],
-                r['percentage_file2'],
-                r['file1'], r['file2']
+                r["percentage_file1"], r["percentage_file2"], r["file1"], r["file2"]
             )
 
         mg.set_tags()
