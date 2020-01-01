@@ -1,6 +1,5 @@
 """Tests for the MOSS interface package for CodeClassroom"""
-from plagcheck import plagcheck
-from plagcheck import analyze
+from plagcheck import analyze, plagcheck
 
 
 def test_check():
@@ -8,37 +7,21 @@ def test_check():
     language = "python"
     userid = "1"
     temp = plagcheck.check(language, userid)
-    temp.addFilesByWildCard("testfiles/test_python*.py")
+    temp.addFile("testfiles/test_python.py")
+    temp.addFile("testfiles/test_python2.py")
     temp.submit()
     results = temp.getResults()
     insights = temp.getInsights()
     share_scores = temp.getShareScores()
 
     assert share_scores == {
-        "testfiles/test_python.py": 2,
-        "testfiles/test_python2.py": 2,
-        "testfiles/test_python3.py": 2,
+        "testfiles/test_python.py": 1,
+        "testfiles/test_python2.py": 1,
     }
 
     assert insights == {"DCtoC Paths": [], "DtoC Paths": [], "DtoDC Paths": []}
 
     assert results == [
-        {
-            "file1": "testfiles/test_python2.py",
-            "file2": "testfiles/test_python3.py",
-            "lines_matched": [["1-3", "1-3"]],
-            "no_of_lines_matched": 3,
-            "percentage_file1": 90,
-            "percentage_file2": 90,
-        },
-        {
-            "file1": "testfiles/test_python.py",
-            "file2": "testfiles/test_python3.py",
-            "lines_matched": [["1-3", "1-3"]],
-            "no_of_lines_matched": 3,
-            "percentage_file1": 90,
-            "percentage_file2": 90,
-        },
         {
             "file1": "testfiles/test_python.py",
             "file2": "testfiles/test_python2.py",
