@@ -2,3 +2,4 @@ mosspy
 beautifulsoup4
 lxml
 python-dotenv
+pytest

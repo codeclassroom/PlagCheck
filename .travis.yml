@@ -5,9 +5,9 @@ python:
   - "3.8"
 
 install:
-  - pip install -r requirements.txt
+  - pip install -r requirements-dev.txt
   - pip install isort black flake8 pylint
-  - pip install pytest coveralls
+  - pip install coveralls
 script:
   - pytest plagcheck
   - py.test plagcheck/plagcheck_test.py

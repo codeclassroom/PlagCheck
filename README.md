@@ -1,84 +1,98 @@
 # PlagCheck ✅
 
+> Moss Results scraper with powerful insights & analysis 💡
+
 ![PyPI](https://img.shields.io/pypi/v/plagcheck?color=blue)
 [![Build Status](https://travis-ci.org/codeclassroom/PlagCheck.svg?branch=master)](https://travis-ci.org/codeclassroom/PlagCheck)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/plagcheck)
 [![Documentation Status](https://readthedocs.org/projects/plagcheck/badge/?version=latest)](https://plagcheck.readthedocs.io/en/latest/?badge=latest)
-[![GitHub license](https://img.shields.io/github/license/codeclassroom/PlagCheck)](https://github.com/codeclassroom/CodeRunner/blob/master/LICENSE)
+![PyPI - License](https://img.shields.io/pypi/l/plagcheck)
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/plagcheck?color=blue)
 
 
-> A Powerful [MOSS](http://theory.stanford.edu/~aiken/moss/) results scrapper.
+## Installation
 
-## Installation 🔮
-
-1. Create virtual environment.
-
-    **Linux/MacOS**
-
-    ```bash
-    virtualenv -p python3 venv && cd venv && source bin/activate
-    ```
-
-    **Windows**
-    (*PowerShell*)
-
-    ```cmd
-    py -m venv venv; .\venv\Scripts\activate;
-    ```
-
-2. Clone the repository.
-
-    ```bash
-    git clone https://github.com/codeclassroom/PlagCheck.git
-    ```
-
-3. Install dependencies.
-
-    ```bash
-    pip install -r requirements.txt
-    ```
-
-4. Set-up virtual environment variables.
-    1. Create a file named `.env` in the root directory & add the following contents.
-
-        ```text
-        USER_ID = 'moss-user-id'
-        ```
-
-    2. For `USER_ID` read instructions on [Moss](http://theory.stanford.edu/~aiken/moss/).
-
-5. Run `demo.py` for demo.
-
-## Usage
-
-Install the package.
+Install using `pip` from PyPI
 
 ```bash
 pip install plagcheck
 ```
 
+or directly from GitHub if you cannot wait to test new features
+
+```bash
+pip install git+https://github.com/codeclassroom/PlagCheck.git
+```
+
+## Usage
+
 ```python
+
 """Usage example"""
 import os
 import pprint
-import plagcheck
+from plagcheck import plagcheck
+
 from dotenv import load_dotenv
 load_dotenv()
 
-program_files = ["testfiles/test_python.py", "testfiles/test_python3.py"]
 language = "python"
 userid = os.environ["USER_ID"]
 
-url, results = plagcheck.check(program_files, language, userid)
 
+moss = plagcheck.check(language, userid)
 
-print(url)
-pprint.pprint(results)
+moss.addFilesByWildCard("testfiles/test_python*.py")
 
+# or moss.addFile("testfiles/test_python.py")
+
+moss.submit()
+
+print(moss.getHomePage())
+pprint.pprint(moss.getResults())
+# print frequency of each shared solution
+pprint.pprint(moss.getShareScores())
+# print potential distributor-culprit relationships
+pprint.pprint(moss.getInsights())
 ```
 
-Read [Documentation](https://github.com/codeclassroom/PlagCheck/blob/master/docs/docs.md).
+## Documentation
+
+> [PlagCheck Documentation](https://plagcheck.readthedocs.io/en/latest/)
+
+
+## Development
+
+##### Prerequisites
+- Python 3.6+
+- virtualenv
+
+1. Create virtual environment.
+```bash
+virtualenv -p python3 venv && cd venv && source bin/activate
+```
+2. Clone the repository.
+```bash
+git https://github.com/codeclassroom/PlagCheck.git
+```
+3. Install Dependencies.
+```bash
+pip install -r requirements.txt
+```
+4. Run tests.
+```bash
+pytest plagcheck
+```
+5. Lint the project with
+```bash
+flake8 plagcheck --max-line-length=88 --ignore=F401
+black --check --diff plagcheck
+```
+
+## 📝 Changelog
+
+See the [CHANGELOG.md](CHANGELOG.md) file for details.
+
 
 ## Author
 
@@ -86,6 +100,17 @@ Read [Documentation](https://github.com/codeclassroom/PlagCheck/blob/master/docs
 
 - Twitter: [@bhupeshimself](https://twitter.com/bhupeshimself)
 - DEV: [bhupesh](https://dev.to/bhupesh)
+
+[![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://forthebadge.com)
+
+## 📜 License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+## 👋 Contributing
+
+Please read the [CONTRIBUTING](CONTRIBUTING.md) guidelines for the process of submitting pull requests to us.
+
 
 ## Contributors ✨
 

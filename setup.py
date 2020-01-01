@@ -9,7 +9,7 @@ setuptools.setup(
     license="MIT",
     author="Bhupesh Varshney",
     author_email="varshneybhupesh@gmail.com",
-    description="Moss scraper with powerful insights",
+    description="Moss Results scraper with powerful insights & analysis",
     keywords="moss plagiarism analysis cheat mosspy",
     long_description=long_description,
     long_description_content_type="text/markdown",
