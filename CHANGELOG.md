@@ -25,6 +25,3 @@
 
 ## [0.1] - Nov 3, 2019
 - Initial Release
-
-# Releases
-See releases on [PyPi](https://pypi.org/project/plagcheck/#history)
