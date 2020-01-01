@@ -4,12 +4,10 @@ from plagcheck import plagcheck
 
 def test_check():
     """General test"""
-    program_files = ["testfiles/test_python.py", "testfiles/test_python3.py"]
-    language = "python"
+    language = "java"
     userid = "1"
     temp = plagcheck.check(language, userid)
-    temp.addFile("testfiles/test_python.py")
-    temp.addFile("testfiles/test_python3.py")
+    temp.addFilesByWildCard("testfiles/test_java*.java")
     temp.submit()
     results = temp.getResults()
 

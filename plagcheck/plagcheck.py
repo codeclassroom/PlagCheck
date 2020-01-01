@@ -6,6 +6,7 @@ from typing import List, Tuple
 import collections
 import mosspy
 from bs4 import BeautifulSoup as bs
+from plagcheck.analyze import Mgroups
 
 HEADERS = {"User-Agent": "Mozilla/5.0"}
 
@@ -82,7 +83,6 @@ class check:
                 percentage_file2=perc_str_to_int(perc2),
                 no_of_lines_matched=int(col3.text.strip()),
                 lines_matched=lines,
-                # lines_matched=self.__get_line_numbers(col1.a.get("href")),
             )
             results.append(result_dict)
         return results
@@ -132,7 +132,7 @@ class check:
         return self.moss_results
 
     def getShareScores(self):
-        """Share Score Insights WIP"""
+        """Share Score Insights"""
         similar_code_files = []
         for result in self.moss_results:
             similar_code_files.append(result['file1'])
@@ -142,3 +142,26 @@ class check:
         share_score = collections.Counter(similar_code_files)
 
         return dict(share_score)
+
+    def getInsights(self):
+        """Analysis for Moss"""
+        mg = Mgroups()
+        similar_code_files = set()
+        insights = {}
+
+        for r in self.moss_results:
+            similar_code_files.add(r['file1'])
+            similar_code_files.add(r['file2'])
+
+        mg.createNodes(similar_code_files)
+
+        for r in self.moss_results:
+            mg.relatesTo(r['percentage_file1'], r['percentage_file2'], r['file1'], r['file2'])
+
+        mg.set_tags()
+
+        insights["DtoC Paths"] = mg.d2c()
+        insights["DtoDC Paths"] = mg.d2dc()
+        insights["DCtoC Paths"] = mg.dc2c()
+
+        return insights

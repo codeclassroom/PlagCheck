@@ -1,15 +1,22 @@
+"""
+analyze.py
+====================================
+The Analysis Module for Moss
+(For info. on how this works contact varshneybhupesh@gmail.com)
+"""
+
+
 class Node:
-    """A Single Sdubmitted file"""
+    """A Single Submitted file"""
 
     def __init__(self, name):
         self.name = name
-        self.perc = []
         self.tag = None
         self.links = []
 
 
 class Mgroups:
-    """A directed graph consisting all individual solutions"""
+    """A Disconnected directed graph consisting all individual solutions"""
 
     linkCount = 0
 
@@ -18,30 +25,48 @@ class Mgroups:
         self.nodeCount = 0
 
     def relatesTo(self, P1, P2, node1, node2):
-        node_dict = {}
+        """Set a path between two file nodes"""
+        node_obj_dict = {}
 
         for r in self.nodes:
-            node_dict[r.name] = r
+            node_obj_dict[r.name] = r
 
-        if node1 in node_dict.keys() and node2 in node_dict.keys():
-            if P1 < P2 and (node_dict[node1].tag and node_dict[node2].tag not in ["D", "C"]):
-                node_dict[node1].tag = "D"
-                node_dict[node2].tag = "C"
-                node_dict[node1].links.append(node_dict[node2])
+        if node1 in node_obj_dict.keys() and node2 in node_obj_dict.keys():
+            if P1 < P2:
+                node_obj_dict[node1].links.append(node_obj_dict[node2])
             elif P1 > P2:
-                node_dict[node1].tag = "C"
-                node_dict[node2].tag = "D"
-                node_dict[node2].links.append(node_dict[node1])
+                node_obj_dict[node2].links.append(node_obj_dict[node1])
             else:
-                node_dict[node1].tag = "DC"
-                node_dict[node2].tag = "DC"
-                node_dict[node1].links.append(node_dict[node2])
+                node_obj_dict[node1].links.append(node_obj_dict[node2])
 
-        node_dict[node1].perc.append(P1)
-        node_dict[node2].perc.append(P2)
         Mgroups.linkCount += 1
 
+    def __indegree(self, node: Node):
+        indegree_count = 0
+        for n in self.nodes:
+            for link in n.links:
+                if link.name == node.name:
+                    indegree_count += 1
+        return indegree_count
+
+    def __outdegree(self, node: Node):
+        return len(node.links)
+
+    def set_tags(self):
+        """Assign appropriate tag to a Node"""
+        for node in self.nodes:
+            in_degree = self.__indegree(node)
+            out_degree = self.__outdegree(node)
+
+            if in_degree == 0 and out_degree > 0:
+                node.tag = "D"
+            elif in_degree > 0 and out_degree == 0:
+                node.tag = "C"
+            elif in_degree != 0 and out_degree != 0:
+                node.tag = "DC"
+
     def createNodes(self, node_set: set):
+        """Create multiple nodes at the same time"""
         for n in node_set:
             self.addNode(n)
 
@@ -52,15 +77,16 @@ class Mgroups:
             self.nodeCount += 1
         return node
 
-    def allNodes(self):
+    def displayNodes(self):
         return [r.name for r in self.nodes]
 
     def displayTags(self):
+        """Display Nodes with their Tags"""
         for node in self.nodes:
             print("{}, tag = {}".format(node.name, node.tag))
 
     def d2c(self):
-        # All Direct Distributor to Culprit paths
+        """All Direct Distributor to Culprit paths"""
         paths = []
         for node in self.nodes:
             for link in node.links:
@@ -69,7 +95,7 @@ class Mgroups:
         return paths
 
     def d2dc(self):
-        # All Direct Distributor to potential Distributor-Culprit paths
+        """All Direct Distributor to potential Distributor-Culprit paths"""
         paths = []
         for node in self.nodes:
             for link in node.links:
@@ -78,7 +104,7 @@ class Mgroups:
         return paths
 
     def dc2c(self):
-        # All potential Distributor-Culprit to direct Culprit paths
+        """All potential Distributor-Culprit to direct Culprit paths"""
         paths = []
         for node in self.nodes:
             for link in node.links:
@@ -87,27 +113,9 @@ class Mgroups:
         return paths
 
     def __repr__(self):
+        """Pretty prints the graph"""
         paths = ""
         for node in self.nodes:
             for link in node.links:
                 paths += "{0} --> {1}\n".format(node.name, link.name)
         return paths
-
-
-# mg = Mgroups()
-# mg.createNodes({'1', '2', '3', '4', '5', '6', '7'})
-
-# mg.relatesTo(45, 88, '3', '1')
-# mg.relatesTo(46, 90, '3', '2')
-# mg.relatesTo(34, 64, '3', '4')
-# mg.relatesTo(34, 64, '3', '5')
-# mg.relatesTo(64, 66, '4', '2')
-# mg.relatesTo(64, 66, '5', '2')
-# mg.relatesTo(94, 94, '4', '5')
-# mg.relatesTo(33, 61, '7', '6')
-
-# print(mg)
-# print(mg.allNodes())
-# print("D to C paths\n", mg.d2c())
-# print("D to DC paths\n", mg.d2dc())
-# print("DC to C paths\n", mg.dc2c())
