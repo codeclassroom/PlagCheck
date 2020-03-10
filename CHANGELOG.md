@@ -4,7 +4,7 @@
 ## [0.4] - March 10, 2020
 
 ### Changed [⚠️ Breaking Changes]
-- `getShareScores` & `getInsights` have been decoupled from the check class, they now have to imported separately.
+- `getShareScores` & `getInsights` have been decoupled from the check class, they now have to be imported separately.
 - Minor changes in the `analyze.py` module.
 
 
