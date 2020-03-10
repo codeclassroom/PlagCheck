@@ -43,6 +43,45 @@ def request(url: str):
     return req.decode("utf-8")
 
 
+def share_scores(moss_data: dict) -> dict:
+    """Share Score Insights"""
+    similar_code_files = []
+    for result in moss_data:
+        similar_code_files.append(result["file1"])
+        similar_code_files.append(result["file2"])
+
+    # frequency of files which are similar
+    share_score = collections.Counter(similar_code_files)
+
+    return dict(share_score)
+
+
+def insights(moss_data: dict) -> dict:
+    """Analysis for Moss"""
+    mg = Mgroups()
+    similar_code_files = set()
+    insights = {}
+
+    for r in moss_data:
+        similar_code_files.add(r["file1"])
+        similar_code_files.add(r["file2"])
+
+    mg.createNodes(similar_code_files)
+
+    for r in moss_data:
+        mg.relate(
+            r["percentage_file1"], r["percentage_file2"], r["file1"], r["file2"]
+        )
+
+    mg.set_tags()
+
+    insights["DtoC Paths"] = mg.d2c()
+    insights["DtoDC Paths"] = mg.d2dc()
+    insights["DCtoC Paths"] = mg.dc2c()
+
+    return insights
+
+
 class check:
     """
     Args:
@@ -133,40 +172,3 @@ class check:
         """Return the result as a list of dictionary"""
 
         return self.moss_results
-
-    def getShareScores(self):
-        """Share Score Insights"""
-        similar_code_files = []
-        for result in self.moss_results:
-            similar_code_files.append(result["file1"])
-            similar_code_files.append(result["file2"])
-
-        # frequency of files which are similar
-        share_score = collections.Counter(similar_code_files)
-
-        return dict(share_score)
-
-    def getInsights(self):
-        """Analysis for Moss"""
-        mg = Mgroups()
-        similar_code_files = set()
-        insights = {}
-
-        for r in self.moss_results:
-            similar_code_files.add(r["file1"])
-            similar_code_files.add(r["file2"])
-
-        mg.createNodes(similar_code_files)
-
-        for r in self.moss_results:
-            mg.relatesTo(
-                r["percentage_file1"], r["percentage_file2"], r["file1"], r["file2"]
-            )
-
-        mg.set_tags()
-
-        insights["DtoC Paths"] = mg.d2c()
-        insights["DtoDC Paths"] = mg.d2dc()
-        insights["DCtoC Paths"] = mg.dc2c()
-
-        return insights

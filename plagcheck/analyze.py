@@ -28,7 +28,7 @@ class Mgroups:
         self.nodes = []
         self.nodeCount = 0
 
-    def relatesTo(self, P1, P2, node1, node2):
+    def relate(self, P1, P2, node1, node2):
         """Set a path between two file nodes"""
         node_obj_dict = {}
 

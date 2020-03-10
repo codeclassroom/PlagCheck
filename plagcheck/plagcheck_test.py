@@ -1,5 +1,6 @@
 """Tests for the MOSS interface package for CodeClassroom"""
 from plagcheck import analyze, plagcheck
+from plagcheck.plagcheck import insights, share_scores
 
 
 def test_check():
@@ -11,15 +12,15 @@ def test_check():
     temp.addFile("testfiles/test_python2.py")
     temp.submit()
     results = temp.getResults()
-    insights = temp.getInsights()
-    share_scores = temp.getShareScores()
+    moss_insights = insights(results)
+    moss_share_scores = share_scores(results)
 
-    assert share_scores == {
+    assert moss_share_scores == {
         "testfiles/test_python.py": 1,
         "testfiles/test_python2.py": 1,
     }
 
-    assert insights == {"DCtoC Paths": [], "DtoC Paths": [], "DtoDC Paths": []}
+    assert moss_insights == {"DCtoC Paths": [], "DtoC Paths": [], "DtoDC Paths": []}
 
     assert results == [
         {
@@ -48,8 +49,8 @@ def test_Mgroups():
     mg = analyze.Mgroups()
     mg.createNodes({"1", "2", "3"})
 
-    mg.relatesTo(45, 88, "3", "1")
-    mg.relatesTo(46, 90, "3", "2")
+    mg.relate(45, 88, "3", "1")
+    mg.relate(46, 90, "3", "2")
 
     mg.set_tags()
 

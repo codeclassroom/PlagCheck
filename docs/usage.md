@@ -1,6 +1,6 @@
 # Usage
 
-plagcheck provides the following classes:
+plagcheck provides the following classes & methods:
 
 ### check(files, lang, user_id)
 
@@ -16,29 +16,33 @@ plagcheck provides the following classes:
 """Usage example"""
 import os
 import pprint
-from plagcheck import plagcheck
+from plagcheck.plagcheck import check, insights, share_scores
 
 from dotenv import load_dotenv
 load_dotenv()
 
-language = "python"
+language = "java"
 userid = os.environ["USER_ID"]
 
 
-moss = plagcheck.check(language, userid)
+moss = check(language, userid)
 
-moss.addFilesByWildCard("testfiles/test_python*.py")
+moss.addFilesByWildCard("testfiles/test_java*.java")
 
 # or moss.addFile("testfiles/test_python.py")
 
 moss.submit()
 
 print(moss.getHomePage())
-pprint.pprint(moss.getResults())
-# print frequency of each shared solution
-pprint.pprint(moss.getShareScores())
+
+result = moss.getResults()
+
+pprint.pprint(result)
+
 # print potential distributor-culprit relationships
-pprint.pprint(moss.getInsights())
+pprint.pprint(insights(result))
+# print frequency of each shared solution
+pprint.pprint(share_scores(result))
 
 ```
 
@@ -72,18 +76,6 @@ c.getHomePage()
 ```python
 
 c.getResults()
-"""
-[
-  {
-    "file1":"filename1.py",
-    "file2":"filename2.py",
-    "percentage": 34,
-    "no_of_lines_matched": 3,
-    "lines_matched":[["2-3", "10-11"]]
-  },
-....
-]
-"""
 
 ```
 
@@ -162,14 +154,16 @@ program code that also appears in the base file is not counted in matches.
 code for an assignment. Multiple Base files are allowed.
 - You should use a base file if it is convenient; base files improve results, but are not usually necessary for obtaining useful information.
 
-### 7. getShareScores()
-**Parameters** : `None` <br>
+<hr>
+
+### share_scores()
+**Parameters** : `Moss Results`(returned by `getResults()`) <br>
 **Return Type** : `Dict` <br>
 **Description**: Share Score is a utility which returns frequency of every individual file.<br>
 **Demo**:
 ```python
 
-c.getShareScores()
+print(share_scores(moss_data))
 
 # Will return
 """
@@ -180,3 +174,14 @@ c.getShareScores()
 ```
 Share Score is basically the frequency of each file appearing in Moss Results.
 i.e Higher the frequency, the more is that solution "shared" by different files.
+
+### insights()
+**Parameters** : `Moss Results`(returned by `getResults()`) <br>
+**Return Type** : `Dict` <br>
+**Description**: See [Insights](/insights).<br>
+**Demo**:
+```python
+
+print(insights(moss_data))
+
+```

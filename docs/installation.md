@@ -2,16 +2,24 @@
 
 Installing plagcheck is pretty simple, just run
 
-`pip install plagcheck`
+```bash
+pip install plagcheck
+```
 
 Install a specific verison 
 
-`pip install plagcheck==0.2`
+```bash
+pip install plagcheck==0.4
+```
 
 or directly from GitHub if you cannot wait to test new features
 
-`pip install git+https://github.com/codeclassroom/PlagCheck.git`
+```bash
+pip install git+https://github.com/codeclassroom/PlagCheck.git
+```
 
-If you have already installed it and want to update
+If you have a old version, update it using
 
-`pip install --upgrade plagcheck`
+```bash
+pip install --upgrade plagcheck
+```
